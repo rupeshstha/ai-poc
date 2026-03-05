@@ -6,6 +6,9 @@ use App\Models\RagDocument;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Http;
 
+/**
+ * This is just a demo of RAG service but this is handled from external services like typesense, elastic search etc.
+ */
 class RagService
 {
     /** Stop words to exclude from TF-IDF vectors */
@@ -98,7 +101,7 @@ class RagService
 
         // Collect all tokens across all documents to compute IDF
         foreach ($documents as $doc) {
-            $tokens = array_unique($this->tokenize($doc->title . ' ' . $doc->content));
+            $tokens = array_unique($this->tokenize($doc->title.' '.$doc->content));
             foreach ($tokens as $token) {
                 $allTokens[$token] = ($allTokens[$token] ?? 0) + 1;
             }
@@ -112,7 +115,7 @@ class RagService
         }
 
         foreach ($documents as $doc) {
-            $vector = $this->buildTfIdfVector($doc->title . ' ' . $doc->content, $idfWeights);
+            $vector = $this->buildTfIdfVector($doc->title.' '.$doc->content, $idfWeights);
             $doc->update(['tfidf_vector' => $vector]);
         }
     }
@@ -163,7 +166,7 @@ class RagService
     public function buildAugmentedPrompt(string $query, Collection $retrievedDocs): string
     {
         $context = $retrievedDocs->map(function (array $doc, int $index): string {
-            return '[Document ' . ($index + 1) . ': ' . $doc['title'] . "]\n" . $doc['content'];
+            return '[Document '.($index + 1).': '.$doc['title']."]\n".$doc['content'];
         })->implode("\n\n---\n\n");
 
         return <<<PROMPT
@@ -196,7 +199,7 @@ class RagService
             ]);
 
         if ($response->failed()) {
-            return 'Error: Failed to get a response from the LLM. ' . $response->body();
+            return 'Error: Failed to get a response from the LLM. '.$response->body();
         }
 
         return $response->json('choices.0.message.content') ?? 'No response received.';

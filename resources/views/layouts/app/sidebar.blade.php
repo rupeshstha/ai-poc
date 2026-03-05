@@ -18,6 +18,9 @@
                     <flux:sidebar.item icon="sparkles" :href="route('rag.demo')" :current="request()->routeIs('rag.demo')" wire:navigate>
                         {{ __('RAG Demo') }}
                     </flux:sidebar.item>
+                    <flux:sidebar.item icon="cpu-chip" :href="route('mcp.explorer')" :current="request()->routeIs('mcp.explorer')" wire:navigate>
+                        {{ __('MCP Explorer') }}
+                    </flux:sidebar.item>
                 </flux:sidebar.group>
             </flux:sidebar.nav>
 
