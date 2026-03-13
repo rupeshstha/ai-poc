@@ -18,8 +18,14 @@
                     <flux:sidebar.item icon="sparkles" :href="route('rag.demo')" :current="request()->routeIs('rag.demo')" wire:navigate>
                         {{ __('RAG Demo') }}
                     </flux:sidebar.item>
+                    <flux:sidebar.item icon="beaker" :href="route('rag.ai')" :current="request()->routeIs('rag.ai')" wire:navigate>
+                        {{ __('RAG + AI Agent') }}
+                    </flux:sidebar.item>
                     <flux:sidebar.item icon="cpu-chip" :href="route('mcp.explorer')" :current="request()->routeIs('mcp.explorer')" wire:navigate>
                         {{ __('MCP Explorer') }}
+                    </flux:sidebar.item>
+                    <flux:sidebar.item icon="chat-bubble-left-right" :href="route('ai.chat')" :current="request()->routeIs('ai.chat')" wire:navigate>
+                        {{ __('AI Chat') }}
                     </flux:sidebar.item>
                 </flux:sidebar.group>
             </flux:sidebar.nav>

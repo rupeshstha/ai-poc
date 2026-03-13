@@ -140,6 +140,7 @@ class RagService
                 $idfWeights[$term] = 1.0; // weights already baked into stored vectors
             }
         }
+        dd($idfWeights);
 
         $queryVector = $this->buildTfIdfVector($query, $idfWeights);
 
