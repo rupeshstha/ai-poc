@@ -5,8 +5,12 @@ namespace App\Livewire;
 use App\Ai\Agents\RagAgent;
 use App\Models\RagDocument;
 use App\Services\RagService;
+use Exception;
+use Flux\Flux;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\View\View;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
@@ -83,11 +87,15 @@ class RagAi extends Component
             $agent->forUser(Auth::user());
         }
 
-        // Step 4: Call the LLM via laravel/ai Agent API (not a raw HTTP call)
-        $response = $agent->prompt(
-            $this->query,
-            model: "openai/gpt-4o-mini",
-        );
+        try {
+            // Step 4: Call the LLM via laravel/ai Agent API (not a raw HTTP call)
+            $response = $agent->prompt($this->query);
+        } catch (Exception $exception) {
+            $this->isLoading = false;
+            $this->llmResponse = "LLM Call failed: {$exception->getMessage()}";
+            Flux::toast(heading: 'LLM call failed', text: $exception->getMessage(), variant: 'danger');
+            return;
+        }
         $this->llmResponse = $response->text;
 
         // Capture the conversation ID created by RemembersConversations middleware
@@ -109,7 +117,7 @@ class RagAi extends Component
      * Past conversations that used RagAgent, scoped to the current user.
      */
     #[Computed]
-    public function ragConversations(): \Illuminate\Support\Collection
+    public function ragConversations(): Collection
     {
         return DB::table('agent_conversations as c')
             ->join('agent_conversation_messages as m', 'c.id', '=', 'm.conversation_id')
@@ -122,7 +130,7 @@ class RagAi extends Component
             ->get();
     }
 
-    public function render(): \Illuminate\View\View
+    public function render(): View
     {
         return view('livewire.rag-ai');
     }

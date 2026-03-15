@@ -57,7 +57,7 @@
                 <form wire:submit="search" class="flex gap-2">
                     <flux:input
                         wire:model="query"
-                        placeholder="e.g. How do black holes form? Why is the ocean salty?"
+                        placeholder="e.g. Explain about internet, What is ocean?"
                         class="flex-1"
                     />
                     <flux:button type="submit" variant="primary" wire:loading.attr="disabled">

@@ -4,6 +4,8 @@ namespace App\Livewire;
 
 use App\Ai\Agents\RagAgent;
 use App\Services\RagService;
+use Exception;
+use Flux\Flux;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -61,9 +63,13 @@ class AiChat extends Component
         Answer based on the context above:
         PROMPT;
 
-        $agent->prompt(
-            prompt: $prompt,
-        );
+        try {
+            $agent->prompt(
+                prompt: $prompt,
+            );
+        } catch (Exception $exception) {
+            Flux::toast(heading: 'LLM call failed', text: $exception->getMessage(), variant: 'danger');
+        }
 
         if (! $this->conversationId) {
             $this->conversationId = $agent->currentConversation();
