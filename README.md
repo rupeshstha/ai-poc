@@ -63,8 +63,8 @@ A proof-of-concept demonstrating how to build **production-grade agentic AI appl
 ### 1. Clone the repo
 
 ```bash
-git clone https://github.com/your-username/laravel-ai-poc.git
-cd laravel-ai-poc
+git clone https://github.com/rupeshstha/ai-poc.git
+cd ai-poc
 ```
 
 ### 2. Install dependencies
@@ -102,6 +102,9 @@ Also confirm `config/services.php` has:
 ],
 ```
 
+In this demo openrouter is used for model provider but feel free to use any provider that you want.
+Check [Model Provider](https://laravel.com/docs/12.x/ai-sdk#provider-support) for supported provider.
+
 ### 4. Database setup
 
 ```bash
@@ -125,7 +128,12 @@ Or use the full dev stack (server + queue + Vite hot reload):
 composer run dev
 ```
 
-Visit `http://localhost:8000`, register an account, and start exploring.
+Visit `http://localhost:8000`, register an account or
+use seeded user **Credentials** and start exploring.
+```bash
+    email: admin@example.com
+    pass: admin123
+```
 
 ---
 
