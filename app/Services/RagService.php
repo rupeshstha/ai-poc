@@ -140,7 +140,6 @@ class RagService
                 $idfWeights[$term] = 1.0; // weights already baked into stored vectors
             }
         }
-        dd($idfWeights);
 
         $queryVector = $this->buildTfIdfVector($query, $idfWeights);
 
@@ -156,6 +155,7 @@ class RagService
         return $scored
             ->sortByDesc('similarity')
             ->take($topK)
+            ->filter(fn ($doc) => $doc['similarity'] > 0) // pass any overlap; LLM decides relevance
             ->values();
     }
 
@@ -184,25 +184,25 @@ class RagService
         PROMPT;
     }
 
-    /**
-     * Send the augmented prompt to the LLM via OpenRouter and return the response.
-     */
-    public function generate(string $augmentedPrompt): string
-    {
-        $response = Http::withToken(config('services.openrouter.api_key'))
-            ->withHeaders(['HTTP-Referer' => config('app.url')])
-            ->post('https://openrouter.ai/api/v1/chat/completions', [
-                'model' => 'openai/gpt-4o-mini',
-                'messages' => [
-                    ['role' => 'user', 'content' => $augmentedPrompt],
-                ],
-                'max_tokens' => 512,
-            ]);
+    // /**
+    //  * Send the augmented prompt to the LLM via OpenRouter and return the response.
+    //  */
+    // public function generate(string $augmentedPrompt): string
+    // {
+    //     $response = Http::withToken(config('services.openrouter.api_key'))
+    //         ->withHeaders(['HTTP-Referer' => config('app.url')])
+    //         ->post('https://openrouter.ai/api/v1/chat/completions', [
+    //             'model' => 'openai/gpt-4o-mini',
+    //             'messages' => [
+    //                 ['role' => 'user', 'content' => $augmentedPrompt],
+    //             ],
+    //             'max_tokens' => 512,
+    //         ]);
 
-        if ($response->failed()) {
-            return 'Error: Failed to get a response from the LLM. '.$response->body();
-        }
+    //     if ($response->failed()) {
+    //         return 'Error: Failed to get a response from the LLM. '.$response->body();
+    //     }
 
-        return $response->json('choices.0.message.content') ?? 'No response received.';
-    }
+    //     return $response->json('choices.0.message.content') ?? 'No response received.';
+    // }
 }

@@ -1,12 +1,8 @@
 {
     "agents": [
-        "codex",
         "claude_code",
-        "cursor",
         "gemini",
-        "copilot",
-        "opencode",
-        "junie"
+        "copilot"
     ],
     "guidelines": true,
     "herd_mcp": false,
@@ -20,6 +16,7 @@
         "fluxui-development",
         "livewire-development",
         "pest-testing",
-        "tailwindcss-development"
+        "tailwindcss-development",
+        "fortify-development"
     ]
 }

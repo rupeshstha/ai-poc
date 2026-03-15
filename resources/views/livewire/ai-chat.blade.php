@@ -29,7 +29,7 @@
         {{-- Header --}}
         <div class="border-b border-zinc-200 dark:border-zinc-700 px-6 py-3 flex items-center gap-3 bg-white dark:bg-zinc-800">
             <flux:heading size="sm">AI Chat</flux:heading>
-            <flux:badge color="blue" size="sm">OpenRouter via laravel/ai</flux:badge>
+            <flux:badge color="blue" size="sm">RAG-grounded · OpenRouter via laravel/ai</flux:badge>
             @if ($conversationId)
                 <flux:text size="sm" class="text-zinc-400 ml-auto font-mono text-xs">{{ $conversationId }}</flux:text>
             @endif
@@ -42,7 +42,7 @@
                     <div>
                         <div class="text-4xl mb-3">💬</div>
                         <flux:heading size="lg">Start a conversation</flux:heading>
-                        <flux:text class="text-zinc-400 mt-1">Messages are stored per-user using laravel/ai's built-in conversation tracking.</flux:text>
+                        <flux:text class="text-zinc-400 mt-1">Answers are grounded in your RAG knowledge base. Only content from rag_documents will be used.</flux:text>
                     </div>
                 </div>
             @endif
@@ -55,8 +55,8 @@
                                 {{ $msg->content }}
                             </div>
                         @else
-                            <div class="rounded-2xl rounded-tl-sm bg-zinc-100 dark:bg-zinc-700 text-zinc-900 dark:text-zinc-100 px-4 py-2.5 text-sm whitespace-pre-wrap">
-                                {{ $msg->content }}
+                            <div class="chat-prose max-w-none rounded-2xl rounded-tl-sm bg-zinc-100 dark:bg-zinc-700 text-zinc-900 dark:text-zinc-100 px-4 py-2.5">
+                                {!! str($msg->content)->markdown() !!}
                             </div>
                         @endif
                         <div class="text-xs text-zinc-400 mt-1 {{ $msg->role === 'user' ? 'text-right' : 'text-left' }}">

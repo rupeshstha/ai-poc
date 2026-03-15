@@ -46,7 +46,7 @@ class RagDemo extends Component
         $this->stage = 'retrieved';
 
         // Step 3: Generate LLM response using the augmented prompt
-        $this->llmResponse = $ragService->generate($this->augmentedPrompt);
+        // $this->llmResponse = $ragService->generate($this->augmentedPrompt);
 
         $this->stage = 'answered';
         $this->isLoading = false;
